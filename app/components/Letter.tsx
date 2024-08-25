@@ -1,4 +1,6 @@
-import { LetterColorVariant } from "../utils";
+"use client";
+
+import { getRandomInt, LetterColorVariant } from "../utils";
 
 interface LetterProps {
   letter: string;
@@ -34,14 +36,23 @@ export default function Letter({
       break;
   }
 
+  const rotateZ25 = `${getRandomInt(-9, 9)}deg`;
+  const rotateY50 = `${getRandomInt(-9, 9)}deg`;
+  const rotateZ75 = `${getRandomInt(-9, 9)}deg`;
+
   return (
     <div
       className="relative animate-letter-roll"
-      style={{
-        transformStyle: "preserve-3d",
-        transform: "rotateX(-5deg) rotateY(3deg)",
-        animationDelay: `${rollDelay}ms`,
-      }}
+      style={
+        {
+          transformStyle: "preserve-3d",
+          transform: "rotateX(-5deg) rotateY(3deg)",
+          animationDelay: `${rollDelay}ms`,
+          "--rotate-z-25": rotateZ25,
+          "--rotate-y-50": rotateY50,
+          "--rotate-z-75": rotateZ75,
+        } as React.CSSProperties
+      }
     >
       <div
         className={`absolute w-12 md:w-20 h-12 md:h-20 [--half:1.5rem] md:[--half:2.5rem] ${colorLight} border-2 ${colorBorder} opacity-80 grid place-items-center text-xl md:text-4xl`}
