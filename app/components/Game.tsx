@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Keyboard from "./Keyboard";
 import Word from "./Word";
 import { isLetter, KeyEnum, LetterColorVariant } from "../utils";
@@ -15,8 +15,7 @@ export default function Game({ startWord, endWord }: GameProps) {
     Array(startWord.length).fill(""),
   ]);
 
-  const keydownListener = (event: KeyboardEvent) => {
-    const key = event.key.toUpperCase();
+  const onKeydown = useCallback((key: string) => {
     if (isLetter(key)) {
       setWords((prev) => {
         const lastWord = prev.at(-1)!;
@@ -50,7 +49,7 @@ export default function Game({ startWord, endWord }: GameProps) {
         return [...prev, Array(startWord.length).fill("")];
       });
     }
-  };
+  }, []);
 
   return (
     <div className="h-screen flex flex-col gap-6">
@@ -69,7 +68,7 @@ export default function Game({ startWord, endWord }: GameProps) {
         <Word letters={endWord.split("")} />
       </div>
       <div className="mt-auto bg-[rgb(36,36,36)] sticky bottom-0">
-        <Keyboard onKeydown={keydownListener} />
+        <Keyboard onKeydown={onKeydown} />
       </div>
     </div>
   );

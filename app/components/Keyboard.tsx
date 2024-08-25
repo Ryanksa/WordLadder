@@ -1,56 +1,180 @@
-"use client";
-
-import { useEffect } from "react";
 import Key from "./Key";
 import { KeyEnum } from "../utils";
 
 interface KeyboardProps {
-  onKeydown: (event: KeyboardEvent) => void;
+  onKeydown: (key: string) => void;
 }
 
 export default function Keyboard({ onKeydown }: KeyboardProps) {
-  useEffect(() => {
-    document.addEventListener("keydown", onKeydown);
-
-    return () => {
-      document.removeEventListener("keydown", onKeydown);
-    };
-  }, [onKeydown]);
-
   return (
-    <div className="flex flex-col gap-3 items-center scale-[50%] md:scale-100 p-4">
+    <div className="flex flex-col gap-3 items-center scale-[55%] md:scale-100 p-4">
       <div className="flex gap-2 w-max">
-        <Key keyEnum={KeyEnum.Q} keyElement="Q" long={false} />
-        <Key keyEnum={KeyEnum.W} keyElement="W" long={false} />
-        <Key keyEnum={KeyEnum.E} keyElement="E" long={false} />
-        <Key keyEnum={KeyEnum.R} keyElement="R" long={false} />
-        <Key keyEnum={KeyEnum.T} keyElement="T" long={false} />
-        <Key keyEnum={KeyEnum.Y} keyElement="Y" long={false} />
-        <Key keyEnum={KeyEnum.U} keyElement="U" long={false} />
-        <Key keyEnum={KeyEnum.I} keyElement="I" long={false} />
-        <Key keyEnum={KeyEnum.O} keyElement="O" long={false} />
-        <Key keyEnum={KeyEnum.P} keyElement="P" long={false} />
+        <Key
+          keyEnum={KeyEnum.Q}
+          keyElement="Q"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.W}
+          keyElement="W"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.E}
+          keyElement="E"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.R}
+          keyElement="R"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.T}
+          keyElement="T"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.Y}
+          keyElement="Y"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.U}
+          keyElement="U"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.I}
+          keyElement="I"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.O}
+          keyElement="O"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.P}
+          keyElement="P"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
       </div>
       <div className="flex gap-2 w-max">
-        <Key keyEnum={KeyEnum.A} keyElement="A" long={false} />
-        <Key keyEnum={KeyEnum.S} keyElement="S" long={false} />
-        <Key keyEnum={KeyEnum.D} keyElement="D" long={false} />
-        <Key keyEnum={KeyEnum.F} keyElement="F" long={false} />
-        <Key keyEnum={KeyEnum.G} keyElement="G" long={false} />
-        <Key keyEnum={KeyEnum.H} keyElement="H" long={false} />
-        <Key keyEnum={KeyEnum.J} keyElement="J" long={false} />
-        <Key keyEnum={KeyEnum.K} keyElement="K" long={false} />
-        <Key keyEnum={KeyEnum.L} keyElement="L" long={false} />
+        <Key
+          keyEnum={KeyEnum.A}
+          keyElement="A"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.S}
+          keyElement="S"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.D}
+          keyElement="D"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.F}
+          keyElement="F"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.G}
+          keyElement="G"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.H}
+          keyElement="H"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.J}
+          keyElement="J"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.K}
+          keyElement="K"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.L}
+          keyElement="L"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
       </div>
       <div className="flex gap-2 w-max">
-        <Key keyEnum={KeyEnum.ENTER} keyElement="ENTER" long={true} />
-        <Key keyEnum={KeyEnum.Z} keyElement="Z" long={false} />
-        <Key keyEnum={KeyEnum.X} keyElement="X" long={false} />
-        <Key keyEnum={KeyEnum.C} keyElement="C" long={false} />
-        <Key keyEnum={KeyEnum.V} keyElement="V" long={false} />
-        <Key keyEnum={KeyEnum.B} keyElement="B" long={false} />
-        <Key keyEnum={KeyEnum.N} keyElement="N" long={false} />
-        <Key keyEnum={KeyEnum.M} keyElement="M" long={false} />
+        <Key
+          keyEnum={KeyEnum.ENTER}
+          keyElement="ENTER"
+          longVariant={true}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.Z}
+          keyElement="Z"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.X}
+          keyElement="X"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.C}
+          keyElement="C"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.V}
+          keyElement="V"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.B}
+          keyElement="B"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.N}
+          keyElement="N"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
+        <Key
+          keyEnum={KeyEnum.M}
+          keyElement="M"
+          longVariant={false}
+          onKeydown={onKeydown}
+        />
         <Key
           keyEnum={KeyEnum.BACKSPACE}
           keyElement={
@@ -61,7 +185,8 @@ export default function Keyboard({ onKeydown }: KeyboardProps) {
               ></path>
             </svg>
           }
-          long={true}
+          longVariant={true}
+          onKeydown={onKeydown}
         />
       </div>
     </div>

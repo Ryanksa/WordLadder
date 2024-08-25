@@ -6,18 +6,24 @@ import { KeyEnum } from "../utils";
 interface KeyProps {
   keyEnum: KeyEnum;
   keyElement: string | ReactElement;
-  long?: boolean;
+  longVariant?: boolean;
+  onKeydown?: (key: string) => void;
 }
 
-export default function Key({ keyEnum, keyElement, long }: KeyProps) {
+export default function Key({
+  keyEnum,
+  keyElement,
+  longVariant = false,
+  onKeydown,
+}: KeyProps) {
   const [pressed, setPressed] = useState(false);
 
   useEffect(() => {
     const keydownListener = (event: KeyboardEvent) => {
-      if (event.key.toUpperCase() === keyEnum) setPressed(true);
+      if (event.key.toUpperCase() === keyEnum) onPress();
     };
     const keyupListener = (event: KeyboardEvent) => {
-      if (event.key.toUpperCase() === keyEnum) setPressed(false);
+      if (event.key.toUpperCase() === keyEnum) onRelease();
     };
 
     document.addEventListener("keydown", keydownListener);
@@ -31,15 +37,18 @@ export default function Key({ keyEnum, keyElement, long }: KeyProps) {
 
   const onPress = () => {
     setPressed(true);
+    onKeydown?.(keyEnum);
   };
 
   const onRelease = () => {
     setPressed(false);
   };
 
-  const containerWidth = long ? "w-[calc(5rem+8px)]" : "w-[calc(3rem+8px)]";
-  const width = long ? "w-20" : "w-12";
-  const fontSize = long ? "text-md" : "text-xl";
+  const containerWidth = longVariant
+    ? "w-[calc(5rem+8px)]"
+    : "w-[calc(3rem+8px)]";
+  const width = longVariant ? "w-20" : "w-12";
+  const fontSize = longVariant ? "text-md" : "text-xl";
   const border = pressed ? "border-y-4 border-x-2" : "border-y-8 border-x-4";
 
   return (
