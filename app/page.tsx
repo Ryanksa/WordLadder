@@ -1,8 +1,8 @@
 import Game from "./components/Game";
 
 export default async function Home() {
-  const response = await fetch(process.env.URL + "/mocks");
-  const words: { start: string; end: string } = await response.json();
+  // TODO: fetch start and end words from BE once its ready
+  // const response = await fetch(process.env.URL + "/");
 
-  return <Game startWord={words.start} endWord={words.end} />;
+  return <Game startWord={"BONG"} endWord={"DOOM"} />;
 }
