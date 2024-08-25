@@ -1,22 +1,24 @@
 "use client";
 
+import { useMemo } from "react";
 import { getRandomInt, LetterColorVariant } from "../utils";
 
 interface LetterProps {
   letter: string;
-  rollDelay?: number;
   colorVariant?: LetterColorVariant;
+  rollDelay?: number;
+  lookUp?: boolean;
 }
 
 export default function Letter({
   letter,
-  rollDelay = 0,
   colorVariant = LetterColorVariant.SYSTEM,
+  rollDelay = 0,
+  lookUp = false,
 }: LetterProps) {
   let colorLight = "";
   let colorDark = "";
   let colorBorder = "";
-
   switch (colorVariant) {
     case LetterColorVariant.NEUTRAL:
       colorLight = "bg-gray-400";
@@ -36,21 +38,32 @@ export default function Letter({
       break;
   }
 
-  const rotateZ25 = `${getRandomInt(-9, 9)}deg`;
-  const rotateY50 = `${getRandomInt(-9, 9)}deg`;
-  const rotateZ75 = `${getRandomInt(-9, 9)}deg`;
+  const rollZ25 = useMemo(() => getRandomInt(-9, 9), []);
+  const rollY50 = useMemo(() => getRandomInt(-9, 9), []);
+  const rollZ75 = useMemo(() => getRandomInt(-9, 9), []);
+
+  const lookUpX = useMemo(() => getRandomInt(1, 18), []);
+  const lookUpY = useMemo(() => getRandomInt(-lookUpX, lookUpX), []);
+  const lookUpZ = useMemo(() => getRandomInt(-lookUpX, lookUpX), []);
+
+  const animationClass = lookUp
+    ? "animate-letter-look-up"
+    : "animate-letter-roll";
 
   return (
     <div
-      className="relative animate-letter-roll"
+      className={`relative ${animationClass}`}
       style={
         {
           transformStyle: "preserve-3d",
           transform: "rotateX(-5deg) rotateY(3deg)",
           animationDelay: `${rollDelay}ms`,
-          "--rotate-z-25": rotateZ25,
-          "--rotate-y-50": rotateY50,
-          "--rotate-z-75": rotateZ75,
+          "--roll-z-25": `${rollZ25}deg`,
+          "--roll-y-50": `${rollY50}deg`,
+          "--roll-z-75": `${rollZ75}deg`,
+          "--look-up-x": `${lookUpX}deg`,
+          "--look-up-y": `${lookUpY}deg`,
+          "--look-up-z": `${lookUpZ}deg`,
         } as React.CSSProperties
       }
     >

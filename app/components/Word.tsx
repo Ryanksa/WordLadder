@@ -4,9 +4,14 @@ import Letter from "./Letter";
 interface WordProps {
   letters: string[];
   letterColorVariants?: LetterColorVariant[];
+  lookUp?: boolean;
 }
 
-export default function Word({ letters, letterColorVariants }: WordProps) {
+export default function Word({
+  letters,
+  letterColorVariants,
+  lookUp,
+}: WordProps) {
   return (
     <div
       className="flex items-center justify-between h-12 md:h-20 [--w:3rem] md:[--w:5rem]"
@@ -20,6 +25,7 @@ export default function Word({ letters, letterColorVariants }: WordProps) {
           letter={letter}
           colorVariant={letterColorVariants?.at(i)}
           rollDelay={i * 75}
+          lookUp={lookUp}
         />
       ))}
     </div>

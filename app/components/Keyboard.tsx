@@ -2,7 +2,7 @@ import Key from "./Key";
 import { KeyEnum } from "../utils";
 
 interface KeyboardProps {
-  onKeydown: (key: string) => void;
+  onKeydown?: (key: string) => void;
 }
 
 export default function Keyboard({ onKeydown }: KeyboardProps) {

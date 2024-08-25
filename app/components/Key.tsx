@@ -33,7 +33,7 @@ export default function Key({
       document.removeEventListener("keydown", keydownListener);
       document.removeEventListener("keyup", keyupListener);
     };
-  }, []);
+  }, [keyEnum, onKeydown]);
 
   const onPress = () => {
     setPressed(true);
@@ -60,8 +60,6 @@ export default function Key({
         style={{ transform: "rotateX(15deg)" }}
         onMouseDown={onPress}
         onMouseUp={onRelease}
-        onTouchStart={onPress}
-        onTouchEnd={onRelease}
       >
         {keyElement}
       </div>
