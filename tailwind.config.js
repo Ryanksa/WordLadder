@@ -27,7 +27,7 @@ module.exports = {
             rotate: "z var(--roll-z-75)",
           },
           "100%": {
-            transform: "rotateX(-365deg)",
+            transform: "rotateX(355deg)",
           },
         },
         "letter-look-up": {

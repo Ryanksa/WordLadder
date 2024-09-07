@@ -28,7 +28,7 @@ export default function Word({
           letter={letter}
           colorVariant={letterColorVariants?.at(i)}
           animation={animation}
-          animationDelay={i * animationDelay}
+          animationDelay={animationDelay}
         />
       ))}
     </div>

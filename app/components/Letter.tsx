@@ -133,5 +133,5 @@ export default function Letter({
 export enum LetterAnimation {
   ROLL = "animate-letter-roll",
   LOOK_UP = "animate-letter-look-up",
-  DROP = "animate-letter-drop"
+  DROP = "animate-letter-drop",
 }

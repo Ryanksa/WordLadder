@@ -18,6 +18,7 @@ export default function Game({ startWord, endWord }: GameProps) {
     Array(startWord.length).fill(""),
   ]);
   const [popConfetti, setPopConfetti] = useState(false);
+  const [rickRolled, setRickRolled] = useState(false);
 
   useEffect(() => {
     if (gameState === GameState.WON) {
@@ -39,6 +40,7 @@ export default function Game({ startWord, endWord }: GameProps) {
         const cursorIndex = lastWord.findIndex((letter) => letter === "");
         if (cursorIndex === -1) return prev;
         lastWord[cursorIndex] = key;
+        if (lastWord.join("") === "RICK") setRickRolled(true);
         return [...prev];
       });
     } else if (key === KeyEnum.BACKSPACE) {
@@ -74,18 +76,24 @@ export default function Game({ startWord, endWord }: GameProps) {
       <div className="h-screen flex flex-col gap-6">
         <div className="flex flex-col items-center gap-6 px-3 py-12">
           <Word letters={startWord.split("")} />
-          {words.map((letters, i) => (
-            <Word
-              key={i}
-              letters={letters}
-              letterColorVariants={letters.map((letter, i) => {
-                if (letter === endWord[i]) return LetterColorVariant.SUCCESS;
-                return LetterColorVariant.NEUTRAL;
-              })}
-              animation={gameState === GameState.WON ? LetterAnimation.LOOK_UP : LetterAnimation.DROP}
-              animationDelay={0}
-            />
-          ))}
+          {words.map((letters, i) => {
+            return (
+              <Word
+                key={i}
+                letters={letters}
+                letterColorVariants={letters.map((letter, i) => {
+                  if (letter === endWord[i]) return LetterColorVariant.SUCCESS;
+                  return LetterColorVariant.NEUTRAL;
+                })}
+                animation={
+                  gameState === GameState.WON ? LetterAnimation.LOOK_UP
+                  : rickRolled ? LetterAnimation.ROLL 
+                  : LetterAnimation.DROP
+                }
+                animationDelay={rickRolled ? (words.length - i - 1) * 90 : 0}
+              />
+            )
+          })}
           <Word letters={endWord.split("")} />
         </div>
         <div className="mt-auto bg-[rgb(36,36,36)] sticky bottom-0">
@@ -98,6 +106,9 @@ export default function Game({ startWord, endWord }: GameProps) {
         <div className="fixed top-12 w-full flex justify-center">
           <ConfettiExplosion />
         </div>
+      )}
+      {rickRolled && (
+        <audio src="/rickroll.mp3" autoPlay loop></audio>
       )}
     </>
   );
