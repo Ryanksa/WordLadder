@@ -1,22 +1,25 @@
 import { LetterColorVariant } from "../utils";
-import Letter from "./Letter";
+import Letter, { LetterAnimation } from "./Letter";
 
 interface WordProps {
   letters: string[];
   letterColorVariants?: LetterColorVariant[];
-  lookUp?: boolean;
+  animation?: LetterAnimation;
+  animationDelay?: number;
 }
 
 export default function Word({
   letters,
   letterColorVariants,
-  lookUp,
+  animation,
+  animationDelay = 0,
 }: WordProps) {
   return (
     <div
       className="flex items-center justify-between h-12 md:h-20 [--w:3rem] md:[--w:5rem]"
       style={{
         width: `calc(${letters.length} * var(--w))`,
+        perspective: "45rem",
       }}
     >
       {letters.map((letter, i) => (
@@ -24,8 +27,8 @@ export default function Word({
           key={i}
           letter={letter}
           colorVariant={letterColorVariants?.at(i)}
-          rollDelay={i * 75}
-          lookUp={lookUp}
+          animation={animation}
+          animationDelay={i * animationDelay}
         />
       ))}
     </div>

@@ -56,7 +56,7 @@ export default function Key({
       className={`${containerWidth} h-[calc(3rem+16px)] flex items-end justify-center`}
     >
       <div
-        className={`${width} h-12 ${fontSize} bg-slate-500 rounded-md grid place-items-center cursor-pointer box-content ${border} border-transparent border-b-slate-700 border-x-slate-600 transition-all`}
+        className={`${width} h-12 ${fontSize} bg-slate-500 rounded-md grid place-items-center cursor-pointer box-content ${border} border-t-[#677890] border-b-slate-700 border-x-slate-600 transition-all`}
         style={{ transform: "rotateX(15deg)" }}
         onMouseDown={onPress}
         onMouseUp={onRelease}

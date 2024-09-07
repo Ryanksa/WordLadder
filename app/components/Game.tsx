@@ -5,6 +5,7 @@ import Keyboard from "./Keyboard";
 import Word from "./Word";
 import { GameState, isLetter, KeyEnum, LetterColorVariant } from "../utils";
 import ConfettiExplosion from "react-confetti-explosion";
+import { LetterAnimation } from "./Letter";
 
 interface GameProps {
   startWord: string;
@@ -81,7 +82,8 @@ export default function Game({ startWord, endWord }: GameProps) {
                 if (letter === endWord[i]) return LetterColorVariant.SUCCESS;
                 return LetterColorVariant.NEUTRAL;
               })}
-              lookUp={gameState === GameState.WON}
+              animation={gameState === GameState.WON ? LetterAnimation.LOOK_UP : LetterAnimation.DROP}
+              animationDelay={0}
             />
           ))}
           <Word letters={endWord.split("")} />

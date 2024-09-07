@@ -6,15 +6,15 @@ import { getRandomInt, LetterColorVariant } from "../utils";
 interface LetterProps {
   letter: string;
   colorVariant?: LetterColorVariant;
-  rollDelay?: number;
-  lookUp?: boolean;
+  animation?: LetterAnimation,
+  animationDelay?: number;
 }
 
 export default function Letter({
   letter,
   colorVariant = LetterColorVariant.SYSTEM,
-  rollDelay = 0,
-  lookUp = false,
+  animation,
+  animationDelay = 0,
 }: LetterProps) {
   let colorLight = "";
   let colorDark = "";
@@ -46,24 +46,39 @@ export default function Letter({
   const lookUpY = useMemo(() => getRandomInt(-lookUpX, lookUpX), []);
   const lookUpZ = useMemo(() => getRandomInt(-lookUpX, lookUpX), []);
 
-  const animationClass = lookUp
-    ? "animate-letter-look-up"
-    : "animate-letter-roll";
+  const dropX0 = useMemo(() => getRandomInt(-27, 27), []);
+  const dropX30 = useMemo(() => dropX0 - (dropX0 / 3), []);
+  const dropX45 = useMemo(() => dropX30 - (dropX30 / 3), []);
+  const dropX60 = useMemo(() => dropX45 - (dropX45 / 3), []);
+  const dropX75 = useMemo(() => dropX60 - (dropX60 / 3), []);
+  const dropZ25 = useMemo(() => getRandomInt(-9, 9), []);
+  const dropY50 = useMemo(() => getRandomInt(-9, 9), []);
+  const dropZ75 = useMemo(() => getRandomInt(-9, 9), []);
+  const dropRotation = useMemo(() => getRandomInt(-3, 0) * 360, []);
 
   return (
     <div
-      className={`relative ${animationClass}`}
+      className={`relative ${animation}`}
       style={
         {
           transformStyle: "preserve-3d",
-          transform: "rotateX(-5deg) rotateY(3deg)",
-          animationDelay: `${rollDelay}ms`,
+          transform: "rotateX(-5deg)",
+          animationDelay: `${animationDelay}ms`,
           "--roll-z-25": `${rollZ25}deg`,
           "--roll-y-50": `${rollY50}deg`,
           "--roll-z-75": `${rollZ75}deg`,
           "--look-up-x": `${lookUpX}deg`,
           "--look-up-y": `${lookUpY}deg`,
           "--look-up-z": `${lookUpZ}deg`,
+          "--drop-z-25": `${dropZ25}deg`,
+          "--drop-y-50": `${dropY50}deg`,
+          "--drop-z-75": `${dropZ75}deg`,
+          "--drop-x-0": `${dropX0}px`,
+          "--drop-x-30": `${dropX30}px`,
+          "--drop-x-45": `${dropX45}px`,
+          "--drop-x-60": `${dropX60}px`,
+          "--drop-x-75": `${dropX75}px`,
+          "--drop-rotation": `${dropRotation}deg`,
         } as React.CSSProperties
       }
     >
@@ -113,4 +128,10 @@ export default function Letter({
       ></div>
     </div>
   );
+}
+
+export enum LetterAnimation {
+  ROLL = "animate-letter-roll",
+  LOOK_UP = "animate-letter-look-up",
+  DROP = "animate-letter-drop"
 }
