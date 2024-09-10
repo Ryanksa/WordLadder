@@ -1,5 +1,5 @@
 import Key from "./Key";
-import { KeyEnum } from "../utils";
+import { KeyEnum } from "../lib/utils";
 
 interface KeyboardProps {
   onKeydown?: (key: string) => void;

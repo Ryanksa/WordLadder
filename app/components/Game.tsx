@@ -3,9 +3,10 @@
 import { useCallback, useState, useEffect } from "react";
 import Keyboard from "./Keyboard";
 import Word from "./Word";
-import { GameState, isLetter, KeyEnum, LetterColorVariant } from "../utils";
+import { GameState, isLetter, KeyEnum, LetterColorVariant } from "../lib/utils";
 import ConfettiExplosion from "react-confetti-explosion";
 import { LetterAnimation } from "./Letter";
+import { validate } from "../lib/api";
 
 interface GameProps {
   startWord: string;
@@ -17,6 +18,7 @@ export default function Game({ startWord, endWord }: GameProps) {
   const [words, setWords] = useState<string[][]>([
     Array(startWord.length).fill(""),
   ]);
+  const [error, setError] = useState<string | null>(null);
   const [popConfetti, setPopConfetti] = useState(false);
   const [rickRolled, setRickRolled] = useState(false);
 
@@ -26,54 +28,85 @@ export default function Game({ startWord, endWord }: GameProps) {
     }
   }, [gameState]);
 
-  const updateGameState = (words: string[][]) => {
+  const updateGameState = async (
+    startWord: string,
+    endWord: string,
+    words: string[]
+  ): Promise<{ won: boolean; error?: string }> => {
     const lastWord = words.at(-1)!;
-    const hasWon = lastWord.join("") === endWord;
-    if (hasWon) setGameState(GameState.WON);
-    return hasWon;
+    const currentLadder = [startWord].concat(words.slice(0, -1));
+
+    const response = await validate(currentLadder, endWord, lastWord);
+    if (!response.valid_word) {
+      return { won: false, error: response.error };
+    }
+
+    return { won: lastWord === endWord };
   };
 
-  const onKeydown = useCallback((key: string) => {
+  const onKeydown = async (key: string) => {
+    setError(null);
+
     if (isLetter(key)) {
-      setWords((prev) => {
-        const lastWord = prev.at(-1)!;
-        const cursorIndex = lastWord.findIndex((letter) => letter === "");
-        if (cursorIndex === -1) return prev;
-        lastWord[cursorIndex] = key;
-        if (lastWord.join("") === "RICK") setRickRolled(true);
-        return [...prev];
-      });
-    } else if (key === KeyEnum.BACKSPACE) {
-      setWords((prev) => {
-        const lastWord = prev.at(-1)!;
-        const cursorIndex = lastWord.findIndex((letter) => letter === "");
-        if (cursorIndex === 0 && prev.length > 1) {
-          return [...prev.slice(0, -1)];
-        } else if (cursorIndex === -1) {
-          lastWord[lastWord.length - 1] = "";
-        } else {
-          lastWord[cursorIndex - 1] = "";
-        }
-        return [...prev];
-      });
-    } else if (key === KeyEnum.ENTER) {
-      setWords((prev) => {
-        const lastWord = prev.at(-1)!;
-        const cursorIndex = lastWord.findIndex((letter) => letter === "");
-        if (cursorIndex !== -1) return prev;
-        window.scroll({
-          top: document.body.scrollHeight,
-          behavior: "smooth",
-        });
-        if (updateGameState(prev)) return prev;
-        return [...prev, Array(startWord.length).fill("")];
-      });
+      const lastWord = words.at(-1)!;
+      const cursorIndex = lastWord.findIndex((letter) => letter === "");
+      if (cursorIndex === -1) return;
+
+      lastWord[cursorIndex] = key;
+      if (lastWord.join("") === "RICK") setRickRolled(true);
+      return setWords([...words]);
     }
-  }, []);
+
+    if (key === KeyEnum.BACKSPACE) {
+      const lastWord = words.at(-1)!;
+      const cursorIndex = lastWord.findIndex((letter) => letter === "");
+
+      if (cursorIndex === 0 && words.length > 1) {
+        return setWords([...words.slice(0, -1)]);
+      }
+
+      if (cursorIndex === -1) {
+        lastWord[lastWord.length - 1] = "";
+      } else {
+        lastWord[cursorIndex - 1] = "";
+      }
+      return setWords([...words]);
+    }
+
+    if (key === KeyEnum.ENTER) {
+      const lastWord = words.at(-1)!;
+      const cursorIndex = lastWord.findIndex((letter) => letter === "");
+      if (cursorIndex !== -1) return;
+
+      window.scroll({
+        top: document.body.scrollHeight,
+        behavior: "smooth",
+      });
+
+      const state = await updateGameState(
+        startWord,
+        endWord,
+        words.map((word) => word.join(""))
+      );
+      if (state.error) {
+        return setError(state.error);
+      }
+      if (state.won) {
+        return setGameState(GameState.WON);
+      }
+
+      return setWords([...words, Array(startWord.length).fill("")]);
+    }
+  };
 
   return (
     <>
       <div className="h-screen flex flex-col gap-6">
+        {error && (
+          <div className="fixed top-3 left-1/2 -translate-x-1/2 z-20 rounded-md px-6 py-2 text-sm md:text-lg font-bold text-red-500 bg-zinc-600/90">
+            {error}
+          </div>
+        )}
         <div className="flex flex-col items-center gap-6 px-3 py-12">
           <Word letters={startWord.split("")} />
           {words.map((letters, i) => {
@@ -86,13 +119,14 @@ export default function Game({ startWord, endWord }: GameProps) {
                   return LetterColorVariant.NEUTRAL;
                 })}
                 animation={
-                  gameState === GameState.WON ? LetterAnimation.LOOK_UP
-                  : rickRolled ? LetterAnimation.ROLL 
-                  : LetterAnimation.DROP
+                  gameState === GameState.WON ? LetterAnimation.LOOK_UP : 
+                  error ? LetterAnimation.SHAKE :
+                  rickRolled ? LetterAnimation.ROLL : 
+                  LetterAnimation.DROP
                 }
                 animationDelay={rickRolled ? (words.length - i - 1) * 90 : 0}
               />
-            )
+            );
           })}
           <Word letters={endWord.split("")} />
         </div>
@@ -107,9 +141,7 @@ export default function Game({ startWord, endWord }: GameProps) {
           <ConfettiExplosion />
         </div>
       )}
-      {rickRolled && (
-        <audio src="/rickroll.mp3" autoPlay loop></audio>
-      )}
+      {rickRolled && <audio src="/rickroll.mp3" autoPlay loop></audio>}
     </>
   );
 }

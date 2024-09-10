@@ -10,7 +10,8 @@ module.exports = {
       animation: {
         "letter-roll": "letter-roll 750ms cubic-bezier(.37,.72,.59,1.4)",
         "letter-look-up": "letter-look-up 3000ms",
-        "letter-drop": "letter-drop 900ms"
+        "letter-drop": "letter-drop 900ms",
+        "letter-shake": "letter-shake 600ms",
       },
       keyframes: {
         "letter-roll": {
@@ -76,9 +77,26 @@ module.exports = {
           },
           "100%": {
             zIndex: -1,
-            transform: "rotateX(var(--drop-rotation))"
-          }
-        }
+            transform: "rotateX(var(--drop-rotation))",
+          },
+        },
+        "letter-shake": {
+          "0%": {
+            rotate: "y 0deg",
+          },
+          "25%": {
+            rotate: "y 18deg",
+          },
+          "50%": {
+            rotate: "y -18deg",
+          },
+          "75%": {
+            rotate: "y 18deg",
+          },
+          "100%": {
+            rotate: "y 0deg",
+          },
+        },
       },
     },
   },

@@ -1,4 +1,4 @@
-import { LetterColorVariant } from "../utils";
+import { LetterColorVariant } from "../lib/utils";
 import Letter, { LetterAnimation } from "./Letter";
 
 interface WordProps {

@@ -1,8 +1,8 @@
 import Game from "./components/Game";
+import { generateGame } from "./lib/api";
 
 export default async function Home() {
-  // TODO: fetch start and end words from BE once its ready
-  // const response = await fetch(process.env.URL + "/");
+  const game = await generateGame();
 
-  return <Game startWord={"BONG"} endWord={"DOOM"} />;
+  return <Game startWord={game.start_word} endWord={game.end_word} />;
 }

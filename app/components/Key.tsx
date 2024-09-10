@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactElement, useState, useEffect } from "react";
-import { KeyEnum } from "../utils";
+import { KeyEnum } from "../lib/utils";
 
 interface KeyProps {
   keyEnum: KeyEnum;

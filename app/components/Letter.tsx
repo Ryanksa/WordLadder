@@ -1,12 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
-import { getRandomInt, LetterColorVariant } from "../utils";
+import { getRandomInt, LetterColorVariant } from "../lib/utils";
 
 interface LetterProps {
   letter: string;
   colorVariant?: LetterColorVariant;
-  animation?: LetterAnimation,
+  animation?: LetterAnimation;
   animationDelay?: number;
 }
 
@@ -47,10 +47,10 @@ export default function Letter({
   const lookUpZ = useMemo(() => getRandomInt(-lookUpX, lookUpX), []);
 
   const dropX0 = useMemo(() => getRandomInt(-27, 27), []);
-  const dropX30 = useMemo(() => dropX0 - (dropX0 / 3), []);
-  const dropX45 = useMemo(() => dropX30 - (dropX30 / 3), []);
-  const dropX60 = useMemo(() => dropX45 - (dropX45 / 3), []);
-  const dropX75 = useMemo(() => dropX60 - (dropX60 / 3), []);
+  const dropX30 = useMemo(() => dropX0 - dropX0 / 3, []);
+  const dropX45 = useMemo(() => dropX30 - dropX30 / 3, []);
+  const dropX60 = useMemo(() => dropX45 - dropX45 / 3, []);
+  const dropX75 = useMemo(() => dropX60 - dropX60 / 3, []);
   const dropZ25 = useMemo(() => getRandomInt(-9, 9), []);
   const dropY50 = useMemo(() => getRandomInt(-9, 9), []);
   const dropZ75 = useMemo(() => getRandomInt(-9, 9), []);
@@ -134,4 +134,5 @@ export enum LetterAnimation {
   ROLL = "animate-letter-roll",
   LOOK_UP = "animate-letter-look-up",
   DROP = "animate-letter-drop",
+  SHAKE = "animate-letter-shake",
 }
