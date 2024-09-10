@@ -5,7 +5,7 @@ import Keyboard from "./Keyboard";
 import Word from "./Word";
 import { GameState, isLetter, KeyEnum, LetterColorVariant } from "../lib/utils";
 import ConfettiExplosion from "react-confetti-explosion";
-import { LetterAnimation } from "./Letter";
+import Letter, { LetterAnimation } from "./Letter";
 import { validate } from "../lib/api";
 
 interface GameProps {
@@ -18,6 +18,7 @@ export default function Game({ startWord, endWord }: GameProps) {
   const [words, setWords] = useState<string[][]>([
     Array(startWord.length).fill(""),
   ]);
+  const [animations, setAniamtions] = useState<LetterAnimation[]>([LetterAnimation.DROP]);
   const [error, setError] = useState<string | null>(null);
   const [popConfetti, setPopConfetti] = useState(false);
   const [rickRolled, setRickRolled] = useState(false);
@@ -45,7 +46,10 @@ export default function Game({ startWord, endWord }: GameProps) {
   };
 
   const onKeydown = async (key: string) => {
-    setError(null);
+    if (error) {
+      setError(null);
+      setAniamtions([...animations.slice(0, -1), LetterAnimation.NONE]);
+    }
 
     if (isLetter(key)) {
       const lastWord = words.at(-1)!;
@@ -53,7 +57,10 @@ export default function Game({ startWord, endWord }: GameProps) {
       if (cursorIndex === -1) return;
 
       lastWord[cursorIndex] = key;
-      if (lastWord.join("") === "RICK") setRickRolled(true);
+      if (lastWord.join("") === "RICK") {
+        setAniamtions(Array(words.length).fill(LetterAnimation.ROLL));
+        setRickRolled(true);
+      }
       return setWords([...words]);
     }
 
@@ -62,6 +69,7 @@ export default function Game({ startWord, endWord }: GameProps) {
       const cursorIndex = lastWord.findIndex((letter) => letter === "");
 
       if (cursorIndex === 0 && words.length > 1) {
+        setAniamtions([...animations.slice(0, -1)]);
         return setWords([...words.slice(0, -1)]);
       }
 
@@ -89,12 +97,15 @@ export default function Game({ startWord, endWord }: GameProps) {
         words.map((word) => word.join(""))
       );
       if (state.error) {
+        setAniamtions([...animations.slice(0, -1), LetterAnimation.SHAKE]);
         return setError(state.error);
       }
       if (state.won) {
+        setAniamtions(Array(words.length).fill(LetterAnimation.LOOK_UP));
         return setGameState(GameState.WON);
       }
 
+      setAniamtions([...animations, LetterAnimation.DROP]);
       return setWords([...words, Array(startWord.length).fill("")]);
     }
   };
@@ -118,12 +129,7 @@ export default function Game({ startWord, endWord }: GameProps) {
                   if (letter === endWord[i]) return LetterColorVariant.SUCCESS;
                   return LetterColorVariant.NEUTRAL;
                 })}
-                animation={
-                  gameState === GameState.WON ? LetterAnimation.LOOK_UP : 
-                  error ? LetterAnimation.SHAKE :
-                  rickRolled ? LetterAnimation.ROLL : 
-                  LetterAnimation.DROP
-                }
+                animation={animations[i]}
                 animationDelay={rickRolled ? (words.length - i - 1) * 90 : 0}
               />
             );

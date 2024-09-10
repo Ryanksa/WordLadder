@@ -84,14 +84,17 @@ module.exports = {
           "0%": {
             rotate: "y 0deg",
           },
-          "25%": {
+          "20%": {
             rotate: "y 18deg",
           },
-          "50%": {
+          "40%": {
             rotate: "y -18deg",
           },
-          "75%": {
-            rotate: "y 18deg",
+          "60%": {
+            rotate: "y 9deg",
+          },
+          "80%": {
+            rotate: "y -9deg",
           },
           "100%": {
             rotate: "y 0deg",

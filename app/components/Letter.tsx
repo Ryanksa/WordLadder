@@ -135,4 +135,5 @@ export enum LetterAnimation {
   LOOK_UP = "animate-letter-look-up",
   DROP = "animate-letter-drop",
   SHAKE = "animate-letter-shake",
+  NONE = "",
 }
