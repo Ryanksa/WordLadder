@@ -11,7 +11,9 @@ type ValidateResponse = {
 };
 
 export const generateGame = async (): Promise<GenerateGameResponse> => {
-  const response = await (await fetch(`${serverUrl}/api/generate_game`)).json();
+  const response = await (
+    await fetch(`${serverUrl}/api/generate_game`, { cache: "no-cache" })
+  ).json();
   return response;
 };
 
