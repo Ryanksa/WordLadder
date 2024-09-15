@@ -1,12 +1,11 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Keyboard from "./Keyboard";
 import Word from "./Word";
 import { GameState, isLetter, KeyEnum, LetterColorVariant } from "../lib/utils";
 import ConfettiExplosion from "react-confetti-explosion";
-import Letter, { LetterAnimation } from "./Letter";
-import { validate } from "../lib/api";
+import { LetterAnimation } from "./Letter";
 
 interface GameProps {
   startWord: string;
@@ -18,10 +17,11 @@ export default function Game({ startWord, endWord }: GameProps) {
   const [words, setWords] = useState<string[][]>([
     Array(startWord.length).fill(""),
   ]);
-  const [animations, setAniamtions] = useState<LetterAnimation[]>([LetterAnimation.DROP]);
+  const [animations, setAniamtions] = useState<LetterAnimation[]>([
+    LetterAnimation.DROP,
+  ]);
   const [error, setError] = useState<string | null>(null);
   const [popConfetti, setPopConfetti] = useState(false);
-  const [rickRolled, setRickRolled] = useState(false);
 
   useEffect(() => {
     if (gameState === GameState.WON) {
@@ -35,13 +35,6 @@ export default function Game({ startWord, endWord }: GameProps) {
     words: string[]
   ): Promise<{ won: boolean; error?: string }> => {
     const lastWord = words.at(-1)!;
-    const currentLadder = [startWord].concat(words.slice(0, -1));
-
-    const response = await validate(currentLadder, endWord, lastWord);
-    if (!response.valid_word) {
-      return { won: false, error: response.error };
-    }
-
     return { won: lastWord === endWord };
   };
 
@@ -57,10 +50,6 @@ export default function Game({ startWord, endWord }: GameProps) {
       if (cursorIndex === -1) return;
 
       lastWord[cursorIndex] = key;
-      if (lastWord.join("") === "RICK") {
-        setAniamtions(Array(words.length).fill(LetterAnimation.ROLL));
-        setRickRolled(true);
-      }
       return setWords([...words]);
     }
 
@@ -130,7 +119,7 @@ export default function Game({ startWord, endWord }: GameProps) {
                   return LetterColorVariant.NEUTRAL;
                 })}
                 animation={animations[i]}
-                animationDelay={rickRolled ? (words.length - i - 1) * 90 : 0}
+                animationDelay={0}
               />
             );
           })}
@@ -147,7 +136,6 @@ export default function Game({ startWord, endWord }: GameProps) {
           <ConfettiExplosion />
         </div>
       )}
-      {rickRolled && <audio src="/rickroll.mp3" autoPlay loop></audio>}
     </>
   );
 }
