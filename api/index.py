@@ -24,22 +24,7 @@ def validate():
     current_ladder = [word.lower() for word in request.json.get("current_ladder")]
     end_word = request.json.get("end_word")
 
-    if word_to_validate is None or current_ladder is None or len(current_ladder) == 0 or end_word is None:
-        return Response(json.dumps({"error": "Missing required fields", "valid_word": False}), status=400)
 
-    if len(word_to_validate) != 4:
-        return Response(json.dumps({"error": "Word must be 4 characters long", "valid_word": False}), status=400)
-
-    if word_to_validate in current_ladder:
-        return Response(json.dumps({"error": "Word already in ladder", "valid_word": False}), status=400)
-
-    if not diff_by_one(word_to_validate, current_ladder[-1]):
-        return Response(json.dumps({"error": "Word must be exactly one letter different", "valid_word": False}), status=400)
-
-    if word_to_validate == end_word:
-        return Response(json.dumps({ "valid_word": True}), status=200)
-
-    # Maybe don't have this part in the final version
     with open('public/4-letter.txt') as f:
         words = f.read().splitlines()
         if word_to_validate in words:
